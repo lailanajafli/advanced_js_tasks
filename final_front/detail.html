@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./detail.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<body class="container">
+    <header>
+        <div class="gender">
+            <a href="">WOMEN</a>
+            <a href="">MEN</a>
+            <a href="">KIDS</a>
+        </div>
+        <div style="margin-right: 6rem;">
+            <img src="./green.png" alt="">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
+            <select>
+                <option selected value="USD">$ USD</option>
+                <option value="GBP">€ GBP</option>
+                <option value="JPY">¥ JPY</option>
+                <option value="RUB">₽ RUB </option>
+            </select>
+            <a href="" id="cartIcon">
+                <i class="fa-solid fa-cart-shopping fa-lg" style="color: #000000;"></i>
+                <div class="cartCount" id="cartItemCount">0</div>
+            </a>
+        </div>
+    </header>
+    <main>
+        <p></p>
+    </main>
+    <script src="products.js"></script>
+    <script>
+        async function LoadData() {
+            let response = await fetch('/final-products.json');
+            let data = await response.json();
+            window.products = data;
+            console.log(data);
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            let cartItemCount = parseInt(localStorage.getItem('cartItemCount')) || 0;
+
+            // Alışveriş sepeti sayısını güncelle.
+            updateCartCount(cartItemCount);
+
+            await LoadData();
+            const main = document.querySelector("main");
+            const urlParams = new URL(document.location).searchParams;
+            const productId = urlParams.get("productID");
+            const currencyParam = urlParams.get("currency");
+            const currency = currencyParam || localStorage.getItem('currency') || 'USD';
+
+            if (!productId) {
+                console.error("productID parameter is missing or invalid.");
+                return;
+            }
+
+            const product = window.products.find(el => el.id == productId);
+
+            if (!product) {
+                console.error("Product not found.");
+                return;
+            }
+
+            const price = product.prices.find(el => el.currency.label == currency);
+
+            if (!price) {
+                console.error(`Price not found for currency: ${currency}`);
+                return;
+            }
+
+            const selectElement = document.querySelector("select");
+            if (selectElement) {
+                selectElement.value = currency;
+            } else {
+                console.error("Select element not found");
+            }
+
+            const currencySelect = document.querySelector('select');
+            const savedCurrency = localStorage.getItem('currency') || 'USD';
+            currencySelect.value = savedCurrency;
+            currencySelect.addEventListener('change', (e) => {
+                localStorage.setItem('currency', e.target.value);
+                updateProducts();
+            });
+
+            if (currencyParam) {
+                localStorage.setItem('currency', currencyParam);
+                currencySelect.value = currencyParam;
+                updateProducts();
+            }
+
+
+
+
+
+            
+
+            function updateProducts() {
+
+                main.innerHTML = "";
+
+                main.innerHTML += ` 
+            <div class="clothes_detail"> 
+                <div class="mini_detail"> 
+                    <div> 
+                        <img src="${product.gallery[0]}" alt=""> 
+                    </div> 
+                    <div> 
+                        <img src="${product.gallery[1]}" alt=""> 
+                    </div> 
+                    <div> 
+                        <img src="${product.gallery[2]}" alt=""> 
+                    </div> 
+                </div> 
+                <div class="picture_detail"> 
+                    <img src="${product.gallery[0]}" alt=""> 
+                </div> 
+                <div class="green-circle" id="${product.id}"></div> 
+                <div class="choice_detail"> 
+                    <p style="font-weight: 700; font-family: Raleway; font-size: 30px;">${product.name}</p> 
+                    <p style="margin-bottom: 0.2rem; font-family: 'Roboto Condensed', sans-serif;">SIZE:</p> 
+                    <div class="size"> 
+                        <form> 
+                            <button type="button" class="color-change-btn" data-size="XS" onclick="changeSize(this)">XS</button> 
+                            <button type="button" class="color-change-btn" data-size="S" onclick="changeSize(this)">S</button> 
+                            <button type="button" class="color-change-btn" data-size="M" onclick="changeSize(this)">M</button> 
+                            <button type="button" class="color-change-btn" data-size="L" onclick="changeSize(this)">L</button> 
+                        </form> 
+                    </div> 
+                    <p style="margin-top: 1rem; margin-bottom: -0.8rem; font-family: 'Roboto Condensed', sans-serif;">COLOR:<p> 
+                    <div class="color"> 
+                        <button type="button" data-color="color1" class="color-btn" onclick="changeColor(this)" style="background-color: rgba(211, 210, 213,1);"></button>  
+                        <button type="button" data-color="color2" class="color-btn" onclick="changeColor(this)" style="background-color: rgba(43, 43, 43, 1);"></button> 
+                        <button type="button" data-color="color3" class="color-btn" onclick="changeColor(this)" style="background-color: rgba(15, 100, 80, 1);"></button> 
+                    </div> 
+ 
+                    <p style="margin-top: 1rem; margin-bottom: 0.3rem; font-family: 'Roboto Condensed', sans-serif;">PRICE:</p> 
+                    <p style="font-weight: 500; font-family: 'Raleway', sans-serif; 
+                    font-family: 'Roboto Condensed', sans-serif; font-size: 20px" id="productPrice">${price.currency.symbol} ${price.amount}</p> 
+                    <button class="green_button" onclick="document.location.href = '/cart.html?productID=${product.id}&currency=${currency}'" onclick="addToCart()">ADD TO CART</button> 
+                    <p style="width: 292px; margin-top: 2rem;">Find stunning women's cocktail dresses and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.</p> 
+                </div> 
+            </div>`;
+
+                updateCartCount(cartItemCount);
+            }
+
+            function addToCart() {
+            let cartItemCount = parseInt(localStorage.getItem('cartItemCount')) || 0;
+            cartItemCount++;
+            localStorage.setItem('cartItemCount', cartItemCount.toString());
+            updateCartCount(cartItemCount);
+            window.location.href = "cart.html";
+        }
+
+        function updateCartCount(count) {
+            const cartCountElement = document.getElementById('cartItemCount');
+            if (cartCountElement) {
+                cartCountElement.innerText = count;
+                cartCountElement.style.display = count > 0 ? 'block' : 'none';
+            }
+        }
+
+            const miniDetail = document.querySelector(".mini_detail");
+            const pictureDetail = document.querySelector(".picture_detail img");
+
+            miniDetail.addEventListener("click", (event) => {
+                const clickedElement = event.target.closest("IMG");
+
+                if (clickedElement) {
+                    const clickedImageUrl = clickedElement.src;
+                    pictureDetail.src = clickedImageUrl;
+                }
+            });
+        });
+
+
+        document.querySelector('select').addEventListener('change', (e) => {
+            localStorage.setItem('currency', e.target.value);
+            window.location.reload();
+        });
+
+
+        function changeSize(button) {
+            const selectedSize = button.getAttribute("data-size");
+            const isSelected = button.classList.contains("selected");
+            if (isSelected) {
+                return;
+            }
+
+            document.querySelectorAll(".color-change-btn.selected").forEach(function (otherButton) {
+                otherButton.style.backgroundColor = "white";
+                otherButton.style.color = "black";
+                otherButton.classList.remove("selected");
+                localStorage.removeItem("selectedSize");
+            });
+
+            button.style.backgroundColor = "black";
+            button.style.color = "white";
+            button.classList.add("selected");
+            localStorage.setItem("selectedSize", selectedSize);
+            console.log('Selected Size:', selectedSize);
+        }
+
+        function changeColor(button) {
+            const selectedColor = button.getAttribute("data-color");
+            const isSelected = button.classList.contains("selected");
+
+            if (isSelected) {
+                return;
+            }
+
+            document.querySelectorAll(".color-btn.selected").forEach(function (otherButton) {
+                otherButton.style.border = "2px solid transparent";
+                otherButton.classList.remove("selected");
+                localStorage.removeItem("selectedColor");
+            });
+
+            button.style.border = "2px solid rgba(94, 206, 123, 1)";
+            button.classList.add("selected");
+            localStorage.setItem("selectedColor", selectedColor);
+
+            console.log('Selected Color:', selectedColor);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            function changeColor(button) {
+                document.querySelectorAll(".color-btn").forEach(function (btn) {
+                    btn.classList.remove("selected");
+                    btn.style.border = "none";
+                });
+
+                button.classList.add("selected");
+                button.style.border = "2px solid rgba(94, 206, 123, 1)";
+
+                const colorKey = button.getAttribute("data-color");
+                localStorage.setItem("selectedColor", colorKey);
+            }
+
+            function changeSize(button) {
+                document.querySelectorAll(".size-btn").forEach(function (btn) {
+                    btn.classList.remove("selected");
+                    btn.style.backgroundColor = "";
+                    btn.style.color = "";
+                });
+
+                button.classList.add("selected");
+                button.style.backgroundColor = "black";
+                button.style.color = "white";
+
+                const sizeKey = button.getAttribute("data-size");
+                localStorage.setItem("selectedSize", sizeKey);
+            }
+
+            document.querySelectorAll(".color-btn").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    changeColor(button);
+                });
+            });
+
+            document.querySelectorAll(".size-btn").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const selectedSize = button.getAttribute("data-size");
+
+                    localStorage.setItem("selectedSize", selectedSize);
+
+                    document.querySelectorAll(".size-btn").forEach(function (otherButton) {
+                        if (otherButton !== button) {
+                            otherButton.classList.remove("selected");
+                        }
+                    });
+
+                    button.classList.add("selected");
+                });
+            });
+
+            document.addEventListener("DOMContentLoaded", () => {
+                const selectedSize = localStorage.getItem("selectedSize");
+
+                if (selectedSize) {
+                    const sizeButton = document.querySelector(`.size-btn[data-size="${selectedSize}"]`);
+                    if (sizeButton) {
+                        sizeButton.classList.add("selected");
+                    }
+                }
+            });
+        });
+
+        function saveSelectedOptions() {
+            const selectedColor = document.querySelector(".color-btn.selected").getAttribute("data-color");
+            const selectedSize = document.querySelector(".size-btn.selected").getAttribute("data-size");
+
+            localStorage.setItem("selectedColor", selectedColor);
+            localStorage.setItem("selectedSize", selectedSize);
+        }
+       
+
+
+
+
+
+
+
+
+
+        
+    </script>
+</body>
+
+</html>

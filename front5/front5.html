@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./front5.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <form name="form">
+        <label>Name
+            <input name="user-name" id="user-name" class="userName" type="text" placeholder="Name" required>
+            <span class="wrong"></span>
+        </label>
+        <label>Password
+            <input name="user-password" minlength="10" class="userName" type="password" placeholder="Password" required>
+            <span class="wrong"></span>
+            <input class="showPassword" type="checkbox">
+
+        </label>
+        <label>Email
+            <input name="email" class="userName" type="email" placeholder="Email" required>
+            <span class="wrong"></span>
+
+        </label>
+        <label>Telephone
+            <input pattern="[+]{1}[0-9]{12}" name="telephone" class="userName" type="tel" placeholder="Telephone"
+                required>
+            <span class="wrong"></span>
+
+        </label>
+        <label>Adress
+            <input name="adress" class="userName" type="text" placeholder="Adress" required>
+            <span class="wrong"></span>
+
+        </label>
+        <label>Profession
+            <input name="profession" class="userName" type="text" placeholder="Profession" required>
+            <span class="wrong"></span>
+
+        </label>
+        <button type="submit" id="send">SEND</button>
+    </form>
+    <div id="result-div" style="display: none;">
+        <button id="close" type="submit2">X</button>
+    </div>
+
+    <script src="./front5.js"></script>
+</body>
+
+</html>

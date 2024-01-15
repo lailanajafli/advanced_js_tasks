@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./cart.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+
+    </style>
+    <title>Shopping Cart</title>
+</head>
+
+<body class="container">
+    <header>
+        <div class="gender">
+            <a href="">WOMEN</a>
+            <a href="">MEN</a>
+            <a href="">KIDS</a>
+        </div>
+        <div style="margin-right: 6rem;">
+            <img src="./green.png" alt="">
+        </div>
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; position: relative;">
+            <select>
+                <option selected value="USD">$ USD</option>
+                <option value="GBP">€ GBP</option>
+                <option value="JPY">¥ JPY</option>
+                <option value="RUB">₽ RUB</option>
+            </select>
+            <a href="" id="cartIcon" onclick="openMiniCartModal(event)">
+                <i class="fa-solid fa-cart-shopping fa-lg" style="color: #000000;"></i>
+                <div class="cartCount" id="cartItemCount">0</div>
+            </a>
+            <div id="miniCartModal">
+                <span class="close" onclick="closeMiniCartModal()">&times;</span>
+                <h2>My Bag</h2>
+                <div id="cartContainer">
+                    <p style="font-weight: 700; font-family: Raleway; font-size: 30px;">CART</p>
+                    <div id="cartContainer" class="between">
+                        <div class="choice_detail">
+                            <p style="font-weight: 700; font-family: Raleway; font-size: 30px;">${product.name}</p>
+                            <p style="font-weight: 500; font-family: 'Raleway', sans-serif;
+                            font-family: 'Roboto Condensed', sans-serif; font-size: 20px">${price.currency.symbol} ${price.amount}</p>
+                            <p style="margin-bottom: 0.2rem; font-family: 'Roboto Condensed', sans-serif;">SIZE:</p>
+                            <div class="size">
+                                <form>
+                                    <button type="button" class="size-btn ${localStorage.getItem('selectedSize') === 'XS' ? 'selected' : ''}" data-size="XS">XS</button>
+                                    <button type="button" class="size-btn ${localStorage.getItem('selectedSize') === 'S' ? 'selected' : ''}" data-size="S">S</button>
+                                    <button type="button" class="size-btn ${localStorage.getItem('selectedSize') === 'M' ? 'selected' : ''}" data-size="M">M</button>
+                                    <button type="button" class="size-btn ${localStorage.getItem('selectedSize') === 'L' ? 'selected' : ''}" data-size="L">L</button>
+                                </form>
+                            </div>
+                            <p style="margin-top: 1rem; margin-bottom: -0.8rem; font-family: 'Roboto Condensed', sans-serif;">COLOR:
+                            <p>
+                            <div class="color">
+                                <button type="button" data-color="color1" class="color-btn ${localStorage.getItem('selectedColor') === 'color1' ? 'selected' : ''}"style="background-color: rgba(211, 210, 213,1);"></button>
+                                <button type="button" data-color="color2" class="color-btn ${localStorage.getItem('selectedColor') === 'color2' ? 'selected' : ''}"style="background-color: rgba(43, 43, 43, 1);"></button>
+                                <button type="button" data-color="color3" class="color-btn ${localStorage.getItem('selectedColor') === 'color3' ? 'selected' : ''}"style="background-color: rgba(15, 100, 80, 1);"></button>
+                            </div>
+                        </div>
+                        <div class="clothes_detail">
+                            <div class="plus_minus">
+                                <button onclick="incrementQuantity()">+</button>
+                              
+                                <button onclick="decrementQuantity()">-</button>
+                            </div>
+                          
+                        </div>
+                    </div>
+                    <div class="quantity_total">
+                      
+                    </div>
+                    <button class="green_button" onclick="placeOrder()">ORDER</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+
+    </main>
+    <script src="./products.js"></script>
+    <script>
+        let quantity = 0;
+
+        function incrementQuantity() {
+            quantity++;
+            updateQuantityAndTotal();
+            updateCartCount(quantity);
+        }
+
+        function decrementQuantity() {
+            if (quantity > 0) {
+                quantity--;
+                updateQuantityAndTotal();
+                updateCartCount(quantity);
+            }
+        }
+
+        function openMiniCartModal(event) {
+            event.preventDefault();
+            const miniCartModal = document.getElementById('miniCartModal');
+            miniCartModal.style.display = 'block';
+        }
+
+        function closeMiniCartModal() {
+            const miniCartModal = document.getElementById('miniCartModal');
+            miniCartModal.style.display = 'none';
+        }
+
+  
+
+
+        async function LoadData() {
+            try {
+                let response = await fetch('/final-products.json');
+                let data = await response.json();
+                window.products = data;
+                console.log(data);
+            } catch (error) {
+                console.error("Veri yüklenirken bir hata oluştu:", error);
+            }
+        }
+
+        LoadData();
+
+        function updateQuantityAndTotal() {
+            const urlParams = new URL(document.location).searchParams;
+            const productId = urlParams.get("productID");
+            const product = window.products.find(el => el.id == productId);
+
+            if (!product) {
+                console.error("Product not found.");
+                return;
+            }
+
+            const currencyParam = urlParams.get("currency");
+            const currency = currencyParam || localStorage.getItem('currency') || 'USD';
+
+            const price = product.prices.find(el => el.currency.label === currency);
+
+            if (!price) {
+                console.error(`Price not found for currency: ${currency}`);
+                return;
+            }
+
+            const total = price.amount * quantity;
+
+
+
+            document.getElementById('quantity').innerText = quantity;
+            document.getElementById('quantityall').innerText = quantity;
+            document.getElementById('totalQuantity').innerText = `${price.currency.symbol} ${total}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            await LoadData();
+            const main = document.querySelector("main");
+            const urlParams = new URL(document.location).searchParams;
+            const productId = urlParams.get("productID");
+            const currencyParam = urlParams.get("currency");
+            const currency = currencyParam || localStorage.getItem('currency') || 'USD';
+
+            let product = window.products.find(el => el.id == productId);
+            let price = product.prices.find(el => el.currency.label == currency);
+
+            if (!price) {
+                console.error(`Price not found for currency: ${currency}`);
+                return;
+            }
+
+            let quantity = 0;
+
+            const selectElement = document.querySelector("select");
+            if (selectElement) {
+                selectElement.value = currency;
+            } else {
+                console.error("Select element not found");
+            }
+
+
+            document.addEventListener("DOMContentLoaded", async () => {
+                const main = document.querySelector('main');
+                const currencySelect = document.querySelector('select');
+                const savedCurrency = localStorage.getItem('currency') || 'USD';
+                currencySelect.value = savedCurrency;
+                currencySelect.addEventListener('change', (e) => {
+                    localStorage.setItem('currency', e.target.value);
+                    updateProducts();
+                });
+
+                const urlParams = new URL(document.location).searchParams;
+                const currencyParam = urlParams.get("currency");
+
+                if (currencyParam) {
+                    localStorage.setItem('currency', currencyParam);
+                    currencySelect.value = currencyParam;
+                    updateProducts();
+                }
+
+                let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+                updateCart();
+
+                function updateProducts() {
+                    main.innerHTML = "";
+
+                    cartItems.forEach(item => {
+                        const product = window.products.find(el => el.id == item.productId);
+                        if (product) {
+                            const currency = localStorage.getItem('currency') || 'USD';
+                            const price = product.prices.find(el => el.currency.label === currency);
+
+                            main.innerHTML += createCartItemHTML(product, price, item.quantity, item.size, item.color);
+                        }
+                    });
+                }
+
+                function createCartItemHTML(product, price, quantity, size, color) {
+                    return `
+        <div class="cart-item">
+            <div class="choice_detail">
+                <p style="font-weight: 700; font-family: Raleway; font-size: 30px;">${product.name}</p>
+                <p style="font-weight: 500; font-family: 'Raleway', sans-serif; font-family: 'Roboto Condensed', sans-serif; font-size: 20px">${price.currency.symbol} ${price.amount}</p>
+                <p style="margin-bottom: 0.2rem; font-family: 'Roboto Condensed', sans-serif;">SIZE: ${size}</p>
+                <div class="size">
+                    <form>
+                        <button type="button" class="size-btn ${size === 'XS' ? 'selected' : ''}" data-size="XS">XS</button>
+                        <button type="button" class="size-btn ${size === 'S' ? 'selected' : ''}" data-size="S">S</button>
+                        <button type="button" class="size-btn ${size === 'M' ? 'selected' : ''}" data-size="M">M</button>
+                        <button type="button" class="size-btn ${size === 'L' ? 'selected' : ''}" data-size="L">L</button>
+                    </form>
+                </div>
+                <p style="margin-top: 1rem; margin-bottom: -0.8rem; font-family: 'Roboto Condensed', sans-serif;">COLOR: ${color}</p>
+                <div class="color">
+                    <button type="button" data-color="color1" class="color-btn ${color === 'color1' ? 'selected' : ''}" style="background-color: rgba(211, 210, 213,1);"></button>
+                    <button type="button" data-color="color2" class="color-btn ${color === 'color2' ? 'selected' : ''}" style="background-color: rgba(43, 43, 43, 1);"></button>
+                    <button type="button" data-color="color3" class="color-btn ${color === 'color3' ? 'selected' : ''}" style="background-color: rgba(15, 100, 80, 1);"></button>
+                </div>
+            </div>
+            <div class="clothes_detail">
+                <div class="plus_minus">
+                    <button onclick="incrementQuantity(${product.id})">+</button>
+                    <p style="font-weight: 600; font-size: 20px;" id="quantity_${product.id}">${quantity}</p>
+                    <button onclick="decrementQuantity(${product.id})">-</button>
+                </div>
+                <div class="picture_detail">
+                    <img src="${product.gallery[0]}" alt="">
+                </div>
+            </div>
+        </div>`;
+                }
+            });
+
+
+            function updateCart() {
+                const cartContainer = document.getElementById('cartContainer');
+                let totalQuantity = 0;
+
+                cartContainer.innerHTML = "";
+
+                cartItems.forEach(item => {
+                    const product = window.products.find(el => el.id == item.productId);
+                    if (product) {
+                        const currency = localStorage.getItem('currency') || 'USD';
+                        const price = product.prices.find(el => el.currency.label === currency);
+
+                        cartContainer.innerHTML += createCartItemHTML(product, price, item.quantity, item.size, item.color);
+
+                        totalQuantity += item.quantity;
+                    }
+                });
+
+                document.getElementById('totalQuantity').innerText = totalQuantity.toString();
+            }
+
+
+            document.addEventListener("DOMContentLoaded", () => {
+                let cartItemCount = parseInt(localStorage.getItem('cartItemCount')) || 0;
+                updateCartCount(cartItemCount);
+
+            });
+
+            window.addEventListener('beforeunload', function () {
+                localStorage.setItem('cartItemCount', cartItemCount.toString());
+            });
+
+            function updateCartCount(count) {
+                const cartCountElement = document.getElementById('cartItemCount');
+
+                if (cartCountElement) {
+                    cartCountElement.innerText = count;
+                    cartCountElement.style.display = count > 0 ? 'block' : 'none';
+                }
+            }
+
+            function addToCart() {
+                cartItemCount++;
+                updateCartCount(cartItemCount);
+            }
+
+
+
+            const currencySelect = document.querySelector('select');
+            const savedCurrency = localStorage.getItem('currency') || 'USD';
+            currencySelect.value = savedCurrency;
+            currencySelect.addEventListener('change', (e) => {
+                localStorage.setItem('currency', e.target.value);
+                updateProducts();
+            });
+
+            if (currencyParam) {
+                localStorage.setItem('currency', currencyParam);
+                currencySelect.value = currencyParam;
+                updateProducts();
+            }
+
+            document.querySelectorAll(".color-btn").forEach(function (button) {
+                const selectedColor = localStorage.getItem(button.getAttribute("data-color"));
+                if (selectedColor === 'selected') {
+                    button.classList.add("selected");
+                }
+            });
+
+            document.querySelectorAll(".size-btn").forEach(function (button) {
+                const selectedSize = localStorage.getItem(button.getAttribute("data-size"));
+                if (selectedSize === 'selected') {
+                    button.classList.add("selected");
+                }
+            });
+
+            function updateProducts() {
+                main.innerHTML = "";
+                const selectedColor = localStorage.getItem('selectedColor');
+                const selectedSize = localStorage.getItem('selectedSize');
+
+                console.log('Selected Color:', selectedColor);
+                console.log('Selected Size:', selectedSize);
+
+                main.innerHTML = `<p style="font-weight: 700; font-family: Raleway; font-size: 30px;">CART</p>
+        <div id="cartContainer" class="between">
+            <div class="choice_detail">
+                <p style="font-weight: 700; font-family: Raleway; font-size: 30px;">${product.name}</p>
+                <p style="font-weight: 500; font-family: 'Raleway', sans-serif;
+                font-family: 'Roboto Condensed', sans-serif; font-size: 20px">${price.currency.symbol} ${price.amount}</p>
+                <p style="margin-bottom: 0.2rem; font-family: 'Roboto Condensed', sans-serif;">SIZE:</p>
+                <div class="size">
+                    <form>
+                        <button type="button" class="size-btn ${localStorage.getItem('selectedSize') === 'XS' ? 'selected' : ''}" data-size="XS">XS</button>
+                        <button type="button" class="size-btn ${localStorage.getItem('selectedSize') === 'S' ? 'selected' : ''}" data-size="S">S</button>
+                        <button type="button" class="size-btn ${localStorage.getItem('selectedSize') === 'M' ? 'selected' : ''}" data-size="M">M</button>
+                        <button type="button" class="size-btn ${localStorage.getItem('selectedSize') === 'L' ? 'selected' : ''}" data-size="L">L</button>
+                    </form>
+                </div>
+                <p style="margin-top: 1rem; margin-bottom: -0.8rem; font-family: 'Roboto Condensed', sans-serif;">COLOR:
+                <p>
+                <div class="color">
+                    <button type="button" data-color="color1" class="color-btn ${localStorage.getItem('selectedColor') === 'color1' ? 'selected' : ''}"style="background-color: rgba(211, 210, 213,1);"></button>
+                    <button type="button" data-color="color2" class="color-btn ${localStorage.getItem('selectedColor') === 'color2' ? 'selected' : ''}"style="background-color: rgba(43, 43, 43, 1);"></button>
+                    <button type="button" data-color="color3" class="color-btn ${localStorage.getItem('selectedColor') === 'color3' ? 'selected' : ''}"style="background-color: rgba(15, 100, 80, 1);"></button>
+                </div>
+            </div>
+            <div class="clothes_detail">
+                <div class="plus_minus">
+                    <button onclick="incrementQuantity()">+</button>
+                    <p style="font-weight: 600; font-size: 20px;" id="quantity">0</p>
+                    <button onclick="decrementQuantity()">-</button>
+                </div>
+                <div class="picture_detail">
+                    <img src="${product ? product.gallery[0] : ''}" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="quantity_total">
+            <p>Quantity: <span style="font-weight: 600; font-size: 20px;" id="quantityall">0</span></p>
+            <p>Total: <span style="font-weight: 600; font-size: 20px;" id="totalQuantity">${price.currency.symbol} ${price.amount}</span></p>
+        </div>
+        <button class="green_button" onclick="placeOrder()">ORDER</button>`;
+            }
+
+        });
+
+
+        function updateCartCount(count) {
+            const cartCountElement = document.getElementById('cartItemCount');
+
+            if (cartCountElement) {
+                cartCountElement.innerText = count;
+                cartCountElement.style.display = count > 0 ? 'block' : 'none';
+            }
+        }
+
+
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const selectedColor = localStorage.getItem("selectedColor");
+            const selectedSize = localStorage.getItem("selectedSize");
+
+            if (selectedColor && selectedSize) {
+                selectColor(selectedColor);
+                selectSize(selectedSize);
+            }
+
+
+
+        });
+
+        function selectColor(selectedColor) {
+            document.querySelectorAll(".color-btn").forEach(function (button) {
+                button.classList.remove("selected");
+                button.style.border = "none";
+            });
+
+            const colorButton = document.querySelector(`.color-btn[data-color="${selectedColor}"]`);
+
+            if (colorButton) {
+                colorButton.classList.add("selected");
+                colorButton.style.border = "2px solid rgba(94, 206, 123, 1)";
+            }
+        }
+
+        function selectSize(selectedSize) {
+            document.querySelectorAll(".size-btn").forEach(function (button) {
+                button.classList.remove("selected");
+                button.style.backgroundColor = "";
+                button.style.color = "";
+            });
+
+            const sizeButton = document.querySelector(`.size-btn[data-size="${selectedSize}"]`);
+
+            if (sizeButton) {
+                sizeButton.classList.add("selected");
+                sizeButton.style.backgroundColor = "black";
+                sizeButton.style.color = "white";
+            }
+        }
+
+        document.querySelector('select').addEventListener('change', (e) => {
+            localStorage.setItem('currency', e.target.value);
+            window.location.reload();
+        });
+
+        window.addEventListener('beforeunload', function () {
+            document.querySelectorAll(".color-btn, .size-btn").forEach(function (button) {
+                localStorage.removeItem(button.getAttribute("data-color"));
+                localStorage.removeItem(button.getAttribute("data-size"));
+            });
+        });
+
+        function placeOrder() {
+    console.log("Order placed successfully!");
+
+    const mainContent = document.querySelector('main');
+    mainContent.innerHTML = '';
+
+    quantity = 0;
+    localStorage.removeItem('selectedColor');
+    localStorage.removeItem('selectedSize');
+
+    const cartItemCount = 0;
+    localStorage.setItem('cartItemCount', cartItemCount.toString());
+    updateCartCount(cartItemCount);
+
+    localStorage.setItem('cartItems', JSON.stringify([]));
+
+    closeMiniCartModal();
+}
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+/* styles.css */
+/* ... Diğer CSS kuralları ... */
+#loadingImage {
+    width: 50px; /* İstenilen genişlik ve yükseklik ayarları */
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  #loadingImage img {
+    width: 100%;
+    height: 100%;
+  }
+  /* ... Diğer CSS kuralları ... */
+  
+  
+  

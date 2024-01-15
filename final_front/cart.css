@@ -1,0 +1,193 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.container {
+  margin-top: 2rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+}
+header .gender {
+  display: flex;
+  gap: 2rem;
+}
+header .gender a {
+  text-decoration: none;
+  color: #1D1F22;
+}
+
+.gender a:hover {
+  color: rgb(94, 206, 123);
+  text-decoration: none;
+  position: relative;
+}
+
+.gender a:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -9px;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(94, 206, 123);
+}
+
+.mini_detail {
+  display: flex;
+  gap: 1.8rem;
+  flex-direction: column;
+}
+
+.mini_detail img {
+  width: 70px;
+  height: 82px;
+  -o-object-fit: contain;
+     object-fit: contain;
+  cursor: pointer;
+}
+
+main {
+  margin-top: 4.5rem;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+}
+main .clothes_detail {
+  display: flex;
+  gap: 3.5rem;
+}
+main .clothes_detail .info_detail {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  line-height: 1;
+  bottom: 4.5rem;
+  left: 1.9rem;
+}
+main .picture_detail {
+  transition: 1s;
+  background-color: rgb(255, 255, 255);
+  margin-left: 1rem;
+}
+main img {
+  width: 298px;
+  -o-object-fit: contain;
+     object-fit: contain;
+  height: 274px;
+}
+
+.size {
+  display: flex;
+  gap: 1rem;
+}
+
+button.size-btn {
+  padding: 7px 18px;
+  font-size: 13px;
+  background-color: white;
+}
+
+.color {
+  display: flex;
+  gap: 1rem;
+}
+.color button {
+  padding: 15px;
+  border: none;
+}
+
+.green_button {
+  background-color: rgb(94, 206, 123);
+  color: white;
+  padding: 10px 60px;
+  border: none;
+  font-size: 13px;
+}
+
+.between {
+  display: flex;
+  border: 1px solid #e9e8e8;
+  border-right: none;
+  border-left: none;
+  padding: 15px 0px;
+  justify-content: space-between;
+}
+
+.plus_minus {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.plus_minus p {
+  text-align: center;
+}
+.plus_minus button {
+  padding: 0px 12px;
+  background-color: white;
+  border: 1.5px solid black;
+  font-size: 26px;
+}
+
+#cartIcon {
+  position: relative;
+}
+
+.cartCount {
+  background-color: black;
+  color: #ffffff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 20px;
+  position: absolute;
+  bottom: 15px;
+  right: -12px;
+  display: none;
+}
+
+.size-btn.selected {
+  background-color: black;
+  color: white;
+}
+
+.color-btn.selected {
+  border: 2px solid rgb(94, 206, 123);
+}
+
+.quantity_total {
+  margin-top: 2rem;
+  line-height: 15px;
+}
+
+#miniCartModal {
+  display: none;
+  position: absolute;
+  top: 112%;
+  margin: 20px auto;
+  left: -63%;
+  transform: translateX(-50%);
+  padding: 17px;
+  border: 1px solid #ecebeb;
+  background-color: rgba(228, 225, 225, 0.5);
+  z-index: 1000;
+  width: 396px;
+}
+
+#miniCartModal p {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}/*# sourceMappingURL=cart.css.map */

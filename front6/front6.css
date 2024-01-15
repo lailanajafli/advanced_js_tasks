@@ -1,0 +1,41 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: rgb(255 147 217);
+}
+
+.content{
+    width: 1150px;
+    border-radius: 6rem;
+    height: 200px;
+    background-color: rgb(167 29 131);
+}
+
+.content .element{
+    width: 10px;
+    height: 200px;
+    padding-right: 10px;
+    position: relative;
+}
+
+.content .element::after{
+    content: '';
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    right: -150px;
+    background-color: black;
+}
+
+p{
+    font-size: 100px;
+}

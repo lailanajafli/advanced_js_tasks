@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#list {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 30px;
+}
+
+#nav{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: fixed;
+  right: 30px;
+  top: 50%;
+}
+
+#nav span{
+  width: 20px;
+  height: 20px;
+  background-color: black;
+  cursor: pointer;
+  display: inline-block;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+#nav span:hover{
+background-color: blue;
+}
+  
+  

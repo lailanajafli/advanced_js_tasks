@@ -1,0 +1,137 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  margin-top: 2rem;
+}
+
+main {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-top: 4.5rem;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+}
+main .clothes {
+  position: relative;
+  width: 290px;
+  cursor: pointer;
+  transition: 1s;
+  display: inline-block;
+}
+main .clothes .clothes_info {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  line-height: 1;
+  bottom: 0.5rem;
+  left: 1.9rem;
+}
+main .clothes_picture {
+  padding: 15px 15px 40px;
+  background-color: rgb(255, 255, 255);
+}
+main img {
+  width: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  height: 350px;
+}
+
+.clothes:hover {
+  box-shadow: 0px 4px 35px 0px rgba(44, 45, 45, 0.1882352941);
+}
+
+@media (max-width: 1024px) {
+  main {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+}
+#pet-select {
+  font-weight: bold;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+}
+
+#pet-select option:hover {
+  background-color: rgb(238, 238, 238);
+  color: black;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+}
+header .gender {
+  display: flex;
+  gap: 2rem;
+}
+header .gender a {
+  text-decoration: none;
+  color: #1D1F22;
+}
+
+.gender a:hover {
+  color: rgb(94, 206, 123);
+  text-decoration: none;
+  position: relative;
+}
+
+.gender a:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -9px;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(94, 206, 123);
+}
+
+.green-circle {
+  width: 52px;
+  height: 52px;
+  background-color: rgb(94, 206, 123);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: -5px;
+  right: 6px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.clothes:hover .green-circle {
+  opacity: 1;
+  cursor: pointer;
+}
+
+#cartIcon {
+  position: relative;
+}
+
+.cartCount {
+  background-color: black;
+  color: #ffffff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 20px;
+  position: absolute;
+  bottom: 15px;
+  right: -12px;
+}/*# sourceMappingURL=final_front.css.map */
